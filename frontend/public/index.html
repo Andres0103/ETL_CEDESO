@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paquetes Alimentarios — El Raizal</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">🥦</div>
+  <div class="header-text">
+    <h1>Procesador de Paquetes Alimentarios</h1>
+    <p>CENTRO DE DESARROLLO SOCIAL EL RAIZAL · COMUNA 3 · MEDELLÍN</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- Paso 1 -->
+  <div class="card">
+    <div class="step-badge">1</div>
+    <div class="card-body">
+      <h2>Selecciona el mes a procesar</h2>
+      <div class="month-row">
+        <select id="sel-mes">
+          <option value="01">Enero</option>
+          <option value="02">Febrero</option>
+          <option value="03">Marzo</option>
+          <option value="04">Abril</option>
+          <option value="05">Mayo</option>
+          <option value="06">Junio</option>
+          <option value="07">Julio</option>
+          <option value="08">Agosto</option>
+          <option value="09">Septiembre</option>
+          <option value="10">Octubre</option>
+          <option value="11">Noviembre</option>
+          <option value="12">Diciembre</option>
+        </select>
+        <input type="number" id="sel-anio" min="2020" max="2099">
+      </div>
+    </div>
+  </div>
+
+  <!-- Paso 2 -->
+  <div class="card">
+    <div class="step-badge">2</div>
+    <div class="card-body">
+      <h2>Carga los archivos del mes</h2>
+      <p class="hint">Un archivo por día de entrega. Puedes cargar varios a la vez.</p>
+
+      <!-- Input oculto, activado por botón -->
+      <input type="file" id="file-input" multiple accept=".xlsx,.xls">
+
+      <div id="dropzone" class="dropzone">
+        <span class="drop-icon">📂</span>
+        <p class="drop-title">Arrastra los archivos aquí</p>
+        <p class="drop-sub">Formatos aceptados: .xlsx / .xls</p>
+        <button type="button" id="btn-pick" class="btn-pick">Buscar archivos en el computador</button>
+      </div>
+
+      <div id="file-list"></div>
+    </div>
+  </div>
+
+  <!-- Paso 3 -->
+  <div class="card">
+    <div class="step-badge">3</div>
+    <div class="card-body">
+      <h2>Procesar y descargar</h2>
+      <p class="hint">Python limpiará, estandarizará y consolidará todos los archivos en uno solo listo para Power BI.</p>
+      <button type="button" id="btn-process" class="btn-process" disabled>
+        ⚙️ &nbsp;Procesar y consolidar archivos
+      </button>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div id="progress-wrap" class="progress-wrap hidden">
+    <div class="prog-label" id="prog-label">Enviando archivos…</div>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+  </div>
+
+  <!-- Alerts -->
+  <div id="alerts"></div>
+
+  <!-- Result -->
+  <div id="result-card" class="result-card hidden">
+    <h3>✅ Archivo listo para Power BI</h3>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-num" id="s-total">—</div><div class="stat-lbl">Beneficiarios</div></div>
+      <div class="stat-box"><div class="stat-num" id="s-paq">—</div><div class="stat-lbl">Paquetes</div></div>
+      <div class="stat-box"><div class="stat-num" id="s-fem">—</div><div class="stat-lbl">Femenino</div></div>
+      <div class="stat-box"><div class="stat-num" id="s-mas">—</div><div class="stat-lbl">Masculino</div></div>
+      <div class="stat-box"><div class="stat-num" id="s-dias">—</div><div class="stat-lbl">Dias</div></div>
+      <div class="stat-box" style="border:1.5px solid #FCA5A5"><div class="stat-num" style="color:#991B1B" id="s-err">—</div><div class="stat-lbl">Errores</div></div>
+      <div class="stat-box" style="border:1.5px solid #FCD34D"><div class="stat-num" style="color:#92400E" id="s-warn">—</div><div class="stat-lbl">Advertencias</div></div>
+    </div>
+    </div>
+    <button type="button" id="btn-download" class="btn-download">
+      ⬇️ &nbsp;Descargar archivo consolidado
+    </button>
+  </div>
+
+</main>
+
+<footer>
+  Herramienta interna · Centro de Desarrollo Social El Raizal · v1.0
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
