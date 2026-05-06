@@ -136,20 +136,6 @@ def procesar():
         return jsonify({"error": str(e), "detalle": tb}), 500
 
 
-@app.route("/descargar/<filename>")
-def descargar(filename):
-    safe = os.path.basename(filename)
-    path = os.path.join(TMP_DIR, safe)
-    if not os.path.exists(path):
-        return jsonify({"error": "Archivo no encontrado"}), 404
-    return send_file(
-        path,
-        as_attachment=True,
-        download_name=safe,
-        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    )
-
-
 # ---------------------------------------------------------------------------
 # Entrada principal
 # ---------------------------------------------------------------------------

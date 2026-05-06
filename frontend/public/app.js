@@ -205,10 +205,6 @@ btnProcess.addEventListener('click', async () => {
   btnProcess.disabled = false;
 });
 
-btnDownload.addEventListener('click', () => {
-  if (state.downloadFilename)
-    window.location.href = '/descargar/' + encodeURIComponent(state.downloadFilename);
-});
 
 // --- Helpers ---
 function setProgress(pct, label) {

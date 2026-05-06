@@ -1,5 +1,10 @@
-flask>=3.0.0
-pandas>=2.0.0
-openpyxl>=3.1.0
-numpy>=1.24.0
-pyinstaller>=6.0.0
+flask>=3.0
+flask-cors>=4.0
+pandas>=2.0
+openpyxl>=3.1
+numpy>=1.26
+pyspark>=3.5
+sqlalchemy>=2.0
+alembic>=1.13
+psycopg2-binary>=2.9
+python-dotenv>=1.0

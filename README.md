@@ -1,100 +1,117 @@
+
 # Procesador de Paquetes Alimentarios — El Raizal
 
-Herramienta interna para limpiar, estandarizar y consolidar
-los archivos Excel mensuales de entregas de paquetes alimentarios,
-listos para subir a Power BI.
+Herramienta integral para limpiar, estandarizar y consolidar archivos Excel mensuales de entregas de paquetes alimentarios, lista para subir a Power BI. Desarrollada para el Centro de Desarrollo Social El Raizal (Comuna 3, Medellín).
 
 ---
 
-## Estructura del proyecto
+## Tabla de Contenidos
+
+- [Descripción General](#descripción-general)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Instalación y Uso](#instalación-y-uso)
+  - [A. Generar el .exe (para coordinador)](#a-generar-el-exe-para-coordinador)
+  - [B. Modo desarrollo](#b-modo-desarrollo)
+- [Flujo de Procesamiento](#flujo-de-procesamiento)
+- [Tecnologías y Dependencias](#tecnologías-y-dependencias)
+- [Notas y Soporte](#notas-y-soporte)
+
+---
+
+## Descripción General
+
+Esta herramienta permite procesar los reportes mensuales de entregas de paquetes alimentarios, consolidando y limpiando los datos para su análisis en Power BI. Automatiza la detección de encabezados, limpieza de texto, normalización de columnas y validación de datos críticos.
+
+---
+
+## Estructura del Proyecto
 
 ```
 raizal_v2/
 ├── backend/
-│   ├── app.py          # Servidor Flask (rutas y arranque)
-│   └── pipeline.py     # Lógica ETL: limpieza y estandarización
+│   ├── api/
+│   │   └── app.py           # Servidor Flask (rutas y arranque)
+│   ├── db/                  # Modelos y sesión SQLAlchemy
+│   └── etl/                 # Lógica ETL: extracción, transformación, carga
 ├── frontend/
-│   └── public/
-│       ├── index.html  # Interfaz visual
-│       ├── style.css   # Estilos
-│       └── app.js      # Lógica del navegador
+│   └── public/              # Interfaz web (HTML, CSS, JS)
 ├── scripts/
-│   └── build.py        # Genera el .exe para Windows
-├── requirements.txt    # Dependencias Python
+│   └── build.py             # Script para generar el .exe
+├── requirements.txt         # Dependencias Python
+├── docker-compose.yml       # Servicios PostgreSQL y PgAdmin
+├── config.py                # Configuración centralizada
 └── README.md
 ```
 
 ---
 
-## Opción A — Generar el .exe (para entregar al coordinador)
+## Instalación y Uso
 
-### Requisitos
-- Windows 10 / 11
-- Python 3.10+ instalado con "Add to PATH" marcado
 
-### Pasos
-```bash
-# 1. Abrir terminal en la carpeta raizal_v2/
-# 2. Ejecutar:
-python scripts/build.py
-```
 
-El `.exe` quedará en `dist/PaquetesAlimentarios_Raizal.exe`.
+### B. Modo desarrollo
 
-Ese único archivo es todo lo que necesita el coordinador.
-**No requiere Python instalado, no requiere nada más.**
+1. Instalar dependencias:
+	```bash
+	pip install -r requirements.txt
+	```
+2. Iniciar el servidor:
+	```bash
+	python backend/api/app.py
+	```
+3. Abrir en el navegador: [http://localhost:5050](http://localhost:5050)
 
 ---
 
-## Opción B — Correr en modo desarrollo
 
-```bash
-# Instalar dependencias
-pip install -r requirements.txt
-
-# Iniciar el servidor
-python backend/app.py
-```
-
-Luego abrir: http://localhost:5050
 
 ---
 
-## Uso (coordinador)
+## Flujo de Procesamiento
 
-1. Doble clic en `PaquetesAlimentarios_Raizal.exe`
-2. El navegador se abre automáticamente
-3. Seleccionar mes y año
-4. Arrastrar los archivos Excel del mes (1–4 archivos)
-5. Clic en **"Procesar y consolidar archivos"**
-6. Revisar advertencias si las hay
-7. Descargar el Excel consolidado y subirlo a Power BI
-
----
-
-## Qué hace el procesamiento (Python)
-
-| Paso | Descripción |
-|------|-------------|
-| Detección | Encuentra los encabezados reales aunque vengan en fila 5, 6 o 7 |
-| Selección | De las 42 columnas del raw, extrae solo las 20 necesarias |
-| Limpieza de texto | Mayúsculas, sin espacios dobles, sin caracteres extraños |
-| Género | F / FEM → FEMENINO · M / MAS → MASCULINO |
-| Documentos | Elimina decimales (39178633.0 → 39178633) |
-| Fechas | Formato estándar YYYY-MM-DD |
-| Consolidación | Apila todos los archivos del mes en uno solo |
-| Power BI | Agrega columnas AÑO, MES, DÍA, MES NOMBRE, ENTREGADO |
-| Validación | Alerta si faltan nombre, género o fecha de entrega |
+| Paso         | Descripción                                                                 |
+|--------------|-----------------------------------------------------------------------------|
+| Detección    | Encuentra los encabezados reales aunque estén en fila 5, 6 o 7              |
+| Selección    | De las columnas originales, extrae solo las necesarias                      |
+| Limpieza     | Mayúsculas, sin espacios dobles, sin caracteres extraños                    |
+| Género       | F / FEM → FEMENINO · M / MAS → MASCULINO                                    |
+| Documentos   | Elimina decimales (39178633.0 → 39178633)                                   |
+| Fechas       | Formato estándar YYYY-MM-DD                                                 |
+| Consolidación| Apila todos los archivos del mes en uno solo                                |
+| Power BI     | Agrega columnas AÑO, MES, DÍA, MES NOMBRE, ENTREGADO                       |
+| Validación   | Alerta si faltan nombre, género o fecha de entrega                          |
 
 ---
 
-## Dependencias
+## Tecnologías y Dependencias
 
-| Librería | Uso |
-|----------|-----|
-| Flask | Servidor web local |
-| flask-cors | Permite llamadas desde el navegador |
-| pandas | Procesamiento de datos |
-| openpyxl | Lectura/escritura de Excel con formato |
-| numpy | Manejo de valores nulos |
-| PyInstaller | Empaquetado como .exe (solo para build) |
+**Backend:**
+- Python 3.10+
+- Flask (servidor web)
+- flask-cors (CORS para frontend)
+- pandas, numpy (procesamiento de datos)
+- openpyxl (Excel)
+- SQLAlchemy, Alembic (ORM y migraciones)
+- psycopg2-binary (PostgreSQL)
+- PyInstaller (solo para build .exe)
+- pyspark (opcional, deduplicación avanzada)
+
+**Frontend:**
+- HTML5, CSS3 (DM Sans, DM Serif Display)
+- JavaScript (manejo de archivos, UI)
+
+**Base de datos:**
+- PostgreSQL (docker-compose incluido)
+- PgAdmin (opcional, para administración visual)
+
+---
+
+## Notas y Soporte
+
+- La configuración de base de datos y variables sensibles se gestiona vía `.env` y `config.py`.
+- Para desarrollo, puedes levantar PostgreSQL y PgAdmin con:
+  ```bash
+  docker-compose up -d
+  ```
+- El pipeline ETL es modular y fácilmente extensible.
+- Para soporte o mejoras, contactar al equipo de desarrollo del Centro El Raizal.

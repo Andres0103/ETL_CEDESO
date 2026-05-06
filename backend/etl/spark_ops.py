@@ -15,7 +15,14 @@ import pandas as pd
 
 log = logging.getLogger(__name__)
 
+import os
 _spark = None  # instancia singleton, lazy
+
+# Forzar Python 3.11 para workers de Spark
+_py311 = r"C:\Users\Administrador\AppData\Local\Programs\Python\Python311\python.exe"
+if os.path.exists(_py311):
+    os.environ["PYSPARK_PYTHON"] = _py311
+    os.environ["PYSPARK_DRIVER_PYTHON"] = _py311
 
 
 def _get_spark():
