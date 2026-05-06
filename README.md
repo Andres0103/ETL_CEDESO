@@ -3,6 +3,21 @@
 
 Herramienta integral para limpiar, estandarizar y consolidar archivos Excel mensuales de entregas de paquetes alimentarios, lista para subir a Power BI. Desarrollada para el Centro de Desarrollo Social El Raizal (Comuna 3, Medellín).
 
+ETL profesional con Spark, PostgreSQL y Docker, Power BI
+
+- Reestructura arquitectura ETL: extract, transform, spark_ops, load, pipeline con responsabilidades únicas
+- Integra PySpark para deduplicación distribuida con fallback automático a pandas
+- Reemplaza carga a Excel por inserción en PostgreSQL (acumulación histórica mes a mes)
+- Agrega ORM con SQLAlchemy: modelos PaqueteAlimentario y CargaETL para auditoría
+- Configura Alembic para migraciones versionadas del esquema de BD
+- Dockeriza PostgreSQL y pgAdmin con volúmenes persistentes
+- Centraliza configuración en config.py con carga desde .env
+- Corrige imports relativos en toda la cadena ETL
+- Resuelve conflicto de versiones Python 3.11/3.12 para workers de Spark
+- Elimina run_pipeline duplicado y lógica de Spark en transform.py
+- Pipeline devuelve stats completas al frontend incluyendo registros insertados en BD
+- Graficas realizada coon power BI que se obtiene de datos de la base de datos de postgres al ser procesado por la ETL
+
 ---
 
 ## Tabla de Contenidos
